@@ -155,7 +155,6 @@ border-radius:5px;
 
 <script>
 
-/* Envoi question vers n8n */
 function sendQuestion(){
 
 let question = document.getElementById("question").value;
@@ -165,51 +164,56 @@ alert("Veuillez écrire une question");
 return;
 }
 
-document.getElementById("response").innerHTML="Chargement...";
+document.getElementById("response").innerHTML = "Chargement...";
 
-fetch("https://n8n-mcda.onrender.com/webhook-test/certificat",{
+fetch("https://n8n-mcda.onrender.com/webhook-test/certificat", {
 
-method:"POST",
+method: "POST",
 
-headers:{
-"Content-Type":"application/json"
+headers: {
+"Content-Type": "application/json"
 },
 
-body:JSON.stringify({
-question:question,
-student_id:"<?php echo $_SESSION["student_id"]; ?>"
+body: JSON.stringify({
+question: question,
+student_id: "<?php echo $_SESSION["student_id"]; ?>"
 })
 
 })
 
-.then(response=>response.json())
+.then(response => response.json())
 
-.then(data=>{
+.then(data => {
 
 console.log(data);
 
 if(data.answer){
-document.getElementById("response").innerHTML=data.answer;
-}else{
-document.getElementById("response").innerHTML="Pas de réponse.";
+document.getElementById("response").innerHTML = data.answer;
+}
+else if(data.message){
+document.getElementById("response").innerHTML = data.message;
+}
+else{
+document.getElementById("response").innerHTML = JSON.stringify(data);
 }
 
 })
 
-.catch(error=>{
+.catch(error => {
 
-document.getElementById("response").innerHTML="Erreur serveur.";
+console.error(error);
+document.getElementById("response").innerHTML = "Erreur serveur.";
 
 });
 
 }
 
 </script>
-
 <?php endif; ?>
 
 </div>
 
 </body>
 </html>
+
 
