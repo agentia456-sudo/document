@@ -1,3 +1,4 @@
+```php
 <?php
 session_start();
 
@@ -64,6 +65,7 @@ exit();
 
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>Agent IA Université</title>
@@ -206,12 +208,25 @@ document.getElementById("response").innerHTML = "Pas de réponse.";
 }
 
 })
+
+.catch(error => {
+
+console.error(error);
+
+document.getElementById("response").innerHTML =
+"Erreur lors de la communication avec le serveur.";
+
+});
+
+}
+
+</script>
+
 <?php endif; ?>
 
 </div>
 
 </body>
+
 </html>
-
-
-
+```
