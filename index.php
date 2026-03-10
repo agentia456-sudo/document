@@ -2,7 +2,7 @@
 session_start();
 
 $project_url = "https://mxemardtyidrhfsnxvad.supabase.co";
-$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZW1hcmR0eWlkcmhmc254dmFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NzkwMzQsImV4cCI6MjA4ODQ1NTAzNH0.u1eFWdodluIqZQ-_Cr5IzSNMNUE1H4GQU-oDYT4Z1oo";
+$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZW1hcmR0eWlkcmhmc254dmFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NzkwMzQsImV4cCI6MjA4ODQ1NTAzNH0.u1eFWdodluIqZQ-_Cr5IzSNMNUE1H4GQU-oDYT4Z1oo;
 
 $error = "";
 
@@ -19,35 +19,41 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
 "apikey: $api_key",
-"Authorization: Bearer $api_key"
+"Authorization: Bearer $api_key",
+"Content-Type: application/json"
 ]);
 
 $response = curl_exec($ch);
+
+if(curl_errno($ch)){
+$error = "Erreur connexion serveur";
+}
+
 curl_close($ch);
 
 $students = json_decode($response, true);
 
-$found = false;
+if($students){
 
 foreach($students as $student){
 
 $db_email = trim($student["email"]);
 $db_pass = trim($student["password"]);
 
-if($db_email == $email && $db_pass == $password){
+if($db_email === $email && $db_pass === $password){
 
 $_SESSION["student_id"] = $student["student_id"];
 $_SESSION["email"] = $db_email;
 
-$found = true;
-break;
+header("Location: index.php");
+exit();
 
 }
 
 }
 
-if(!$found){
 $error = "Email ou mot de passe incorrect";
+
 }
 
 }
@@ -138,11 +144,11 @@ color:blue;
 
 </form>
 
-<p style="color:red;"><?php echo $error; ?></p>
+<p style="color:red;"><?php echo htmlspecialchars($error); ?></p>
 
 <?php else: ?>
 
-<h3>Bienvenue <?php echo $_SESSION["email"]; ?></h3>
+<h3>Bienvenue <?php echo htmlspecialchars($_SESSION["email"]); ?></h3>
 
 <a href="?logout=1">Déconnexion</a>
 
@@ -164,7 +170,7 @@ function sendQuestion(){
 
 let question = document.getElementById("question").value;
 
-if(question == ""){
+if(question.trim() === ""){
 alert("Veuillez écrire une question");
 return;
 }
@@ -215,7 +221,6 @@ document.getElementById("response").innerHTML = "Pas de réponse.";
 .catch(error => {
 
 document.getElementById("response").innerHTML = "Erreur serveur";
-
 console.error(error);
 
 });
