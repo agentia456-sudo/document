@@ -187,33 +187,31 @@ student_id: "<?php echo $_SESSION["student_id"]; ?>"
 
 console.log(data);
 
-if(data.answer){
-document.getElementById("response").innerHTML = data.answer;
+if(data.pdf_url){
+
+document.getElementById("response").innerHTML =
+"Certificat généré avec succès ✅ <br><br>" +
+"<a href='"+data.pdf_url+"' target='_blank'>Télécharger le certificat PDF</a>";
+
 }
-else if(data.message){
-document.getElementById("response").innerHTML = data.message;
+else if(data.answer){
+
+document.getElementById("response").innerHTML = data.answer;
+
 }
 else{
-document.getElementById("response").innerHTML = JSON.stringify(data);
+
+document.getElementById("response").innerHTML = "Pas de réponse.";
+
 }
 
 })
-
-.catch(error => {
-
-console.error(error);
-document.getElementById("response").innerHTML = "Erreur serveur.";
-
-});
-
-}
-
-</script>
 <?php endif; ?>
 
 </div>
 
 </body>
 </html>
+
 
 
