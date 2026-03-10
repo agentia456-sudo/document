@@ -1,4 +1,3 @@
-```php
 <?php
 session_start();
 
@@ -57,7 +56,7 @@ $error = "Email ou mot de passe incorrect";
 if(isset($_GET["logout"])){
 
 session_destroy();
-header("Location:index.php");
+header("Location: index.php");
 exit();
 
 }
@@ -81,7 +80,7 @@ margin-top:80px;
 
 .box{
 background:white;
-width:400px;
+width:420px;
 margin:auto;
 padding:30px;
 border-radius:10px;
@@ -107,6 +106,10 @@ margin-top:20px;
 padding:15px;
 background:#eee;
 border-radius:5px;
+}
+
+a{
+color:blue;
 }
 
 </style>
@@ -211,10 +214,9 @@ document.getElementById("response").innerHTML = "Pas de réponse.";
 
 .catch(error => {
 
-console.error(error);
+document.getElementById("response").innerHTML = "Erreur serveur";
 
-document.getElementById("response").innerHTML =
-"Erreur lors de la communication avec le serveur.";
+console.error(error);
 
 });
 
@@ -227,6 +229,4 @@ document.getElementById("response").innerHTML =
 </div>
 
 </body>
-
 </html>
-```
