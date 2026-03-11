@@ -2,9 +2,10 @@
 session_start();
 
 $project_url = "https://mxemardtyidrhfsnxvad.supabase.co";
-$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZW1hcmR0eWlkcmhmc254dmFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NzkwMzQsImV4cCI6MjA4ODQ1NTAzNH0.u1eFWdodluIqZQ-_Cr5IzSNMNUE1H4GQU-oDYT4Z1oo;
+$api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZW1hcmR0eWlkcmhmc254dmFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NzkwMzQsImV4cCI6MjA4ODQ1NTAzNH0.u1eFWdodluIqZQ-_Cr5IzSNMNUE1H4GQU-oDYT4Z1oo";
 
 $error = "";
+
 
 /* LOGIN */
 if(isset($_POST["login"])){
@@ -26,7 +27,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 $response = curl_exec($ch);
 
 if(curl_errno($ch)){
-$error = "Erreur connexion serveur";
+$error = "Erreur serveur";
 }
 
 curl_close($ch);
@@ -37,13 +38,13 @@ if($students){
 
 foreach($students as $student){
 
-$db_email = trim($student["email"]);
-$db_pass = trim($student["password"]);
-
-if($db_email === $email && $db_pass === $password){
+if(
+trim($student["email"]) === $email &&
+trim($student["password"]) === $password
+){
 
 $_SESSION["student_id"] = $student["student_id"];
-$_SESSION["email"] = $db_email;
+$_SESSION["email"] = $student["email"];
 
 header("Location: index.php");
 exit();
@@ -57,6 +58,7 @@ $error = "Email ou mot de passe incorrect";
 }
 
 }
+
 
 /* LOGOUT */
 if(isset($_GET["logout"])){
@@ -114,10 +116,6 @@ background:#eee;
 border-radius:5px;
 }
 
-a{
-color:blue;
-}
-
 </style>
 
 </head>
@@ -144,11 +142,16 @@ color:blue;
 
 </form>
 
-<p style="color:red;"><?php echo htmlspecialchars($error); ?></p>
+<p style="color:red;">
+<?php echo htmlspecialchars($error); ?>
+</p>
 
 <?php else: ?>
 
-<h3>Bienvenue <?php echo htmlspecialchars($_SESSION["email"]); ?></h3>
+<h3>
+Bienvenue
+<?php echo htmlspecialchars($_SESSION["email"]); ?>
+</h3>
 
 <a href="?logout=1">Déconnexion</a>
 
@@ -156,29 +159,40 @@ color:blue;
 
 <h3>Agent IA Université</h3>
 
-<input type="text" id="question" placeholder="Posez votre question">
+<input
+type="text"
+id="question"
+placeholder="Posez votre question"
+>
 
 <br>
 
-<button onclick="sendQuestion()">Envoyer</button>
+<button onclick="sendQuestion()">
+Envoyer
+</button>
 
 <div id="response"></div>
+
 
 <script>
 
 function sendQuestion(){
 
-let question = document.getElementById("question").value;
+let question =
+document.getElementById("question").value;
 
 if(question.trim() === ""){
-alert("Veuillez écrire une question");
+alert("Ecrire une question");
 return;
 }
 
-document.getElementById("response").innerHTML = "Chargement...";
+document.getElementById("response").innerHTML =
+"Chargement...";
 
-fetch("https://n8n-mcda.onrender.com/webhook-test/certificat", {
 
+fetch(
+"https://n8n-mcda.onrender.com/webhook-test/certificat",
+{
 method: "POST",
 
 headers: {
@@ -186,8 +200,12 @@ headers: {
 },
 
 body: JSON.stringify({
+
 question: question,
-student_id: "<?php echo $_SESSION["student_id"]; ?>"
+
+student_id:
+"<?php echo $_SESSION['student_id']; ?>"
+
 })
 
 })
@@ -198,21 +216,28 @@ student_id: "<?php echo $_SESSION["student_id"]; ?>"
 
 console.log(data);
 
+
 if(data.pdf_url){
 
 document.getElementById("response").innerHTML =
-"Certificat généré avec succès ✅ <br><br>" +
-"<a href='"+data.pdf_url+"' target='_blank'>Télécharger le certificat PDF</a>";
+
+"Certificat généré ✅<br><br>" +
+
+"<a href='"+
+data.pdf_url+
+"' target='_blank'>Télécharger PDF</a>";
 
 }
 else if(data.answer){
 
-document.getElementById("response").innerHTML = data.answer;
+document.getElementById("response").innerHTML =
+data.answer;
 
 }
 else{
 
-document.getElementById("response").innerHTML = "Pas de réponse.";
+document.getElementById("response").innerHTML =
+JSON.stringify(data);
 
 }
 
@@ -220,8 +245,10 @@ document.getElementById("response").innerHTML = "Pas de réponse.";
 
 .catch(error => {
 
-document.getElementById("response").innerHTML = "Erreur serveur";
-console.error(error);
+console.log(error);
+
+document.getElementById("response").innerHTML =
+"Erreur serveur";
 
 });
 
