@@ -88,7 +88,7 @@ margin-top:80px;
 
 .box{
 background:white;
-width:420px;
+width:450px;
 margin:auto;
 padding:30px;
 border-radius:10px;
@@ -114,6 +114,11 @@ margin-top:20px;
 padding:15px;
 background:#eee;
 border-radius:5px;
+}
+
+iframe{
+margin-top:10px;
+border:1px solid #ccc;
 }
 
 </style>
@@ -216,8 +221,7 @@ student_id:
 
 console.log(data);
 
-
-iif(data.pdf_url){
+if(data.pdf_url){
 
 document.getElementById("response").innerHTML =
 
@@ -260,4 +264,3 @@ document.getElementById("response").innerHTML =
 
 </body>
 </html>
-
