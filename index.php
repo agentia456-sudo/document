@@ -217,15 +217,13 @@ student_id:
 console.log(data);
 
 
-if(data.pdf_url){
+iif(data.pdf_url){
 
 document.getElementById("response").innerHTML =
 
 "Certificat généré ✅<br><br>" +
 
-"<a href='"+
-data.pdf_url+
-"' target='_blank'>Télécharger PDF</a>";
+"<iframe src='"+data.pdf_url+"' width='100%' height='500'></iframe>";
 
 }
 else if(data.answer){
@@ -262,3 +260,4 @@ document.getElementById("response").innerHTML =
 
 </body>
 </html>
+
